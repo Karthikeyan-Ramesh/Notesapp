@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <servlet>
+      <servlet-name>category</servlet-name>
+      <servlet-class>action.CategoryAction</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+      <servlet-name>category</servlet-name>
+      <url-pattern>/category</url-pattern>
+      <url-pattern>/category/doPost</url-pattern>
+      <url-pattern>/category/doPut</url-pattern>
+      <url-pattern>/category/doDelete</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+      <servlet-name>note</servlet-name>
+      <servlet-class>action.NotesAction</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+      <servlet-name>note</servlet-name>
+      <url-pattern>/note</url-pattern>
+      <url-pattern>/note/doPost</url-pattern>
+      <url-pattern>/note/doPut</url-pattern>
+      <url-pattern>/note/doDelete</url-pattern>
+  </servlet-mapping>
+    
+</web-app>
