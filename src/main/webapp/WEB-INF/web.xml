@@ -15,9 +15,7 @@
   <servlet-mapping>
       <servlet-name>category</servlet-name>
       <url-pattern>/category</url-pattern>
-      <url-pattern>/category/doPost</url-pattern>
-      <url-pattern>/category/doPut</url-pattern>
-      <url-pattern>/category/doDelete</url-pattern>
+      <url-pattern>/category/*</url-pattern>
   </servlet-mapping>
   
   <servlet>
@@ -28,9 +26,7 @@
   <servlet-mapping>
       <servlet-name>note</servlet-name>
       <url-pattern>/note</url-pattern>
-      <url-pattern>/note/doPost</url-pattern>
-      <url-pattern>/note/doPut</url-pattern>
-      <url-pattern>/note/doDelete</url-pattern>
+      <url-pattern>/note/*</url-pattern>
   </servlet-mapping>
     
 </web-app>
