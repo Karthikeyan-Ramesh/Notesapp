@@ -38,7 +38,7 @@ public class DatastoreDaoTest {
 
 
 	@Test 
-	public void testDatastore()throws ServletException,IOException {
+	public void testDatastoreToCreateCategory()throws ServletException,IOException {
 	
 		Category catObj = new Category.Builder()
 				.categoryName("Sports")

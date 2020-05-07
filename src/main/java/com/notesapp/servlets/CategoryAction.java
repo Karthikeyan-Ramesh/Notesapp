@@ -2,6 +2,7 @@ package com.notesapp.servlets;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,7 +37,9 @@ public class CategoryAction extends HttpServlet {
 				.createdBy(request.getParameter("createdBy"))
 				.createdDateTime(date)
 				.build();
-		
+				
+		if(Pattern.matches("[a-zA-Z]", catObj.getCategoryName())) {    //to check whether the category only contain alphabets
+			
 		NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
 	    
 	    long id = dao.createCategory(catObj);
@@ -48,6 +51,10 @@ public class CategoryAction extends HttpServlet {
 	    else {
 	    	response.getWriter().print("Failed to create Category");
 	    }
+	    
+		}else {
+			response.getWriter().print("Category should only contains Alphabets ");
+		}
 	}
 	
 	@Override

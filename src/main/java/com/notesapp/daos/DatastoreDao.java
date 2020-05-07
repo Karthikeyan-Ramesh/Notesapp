@@ -25,7 +25,6 @@ public class DatastoreDao implements NotesappDao{
 		Entity entityObj = new Entity(CATEGORY_KIND);
 		entityObj.setProperty(Category.CATEGORY_NAME, catObj.getCategoryName());
 		entityObj.setProperty(Category.CREATED_BY, catObj.getCreatedBy());
-		
 		Key catKey = datastore.put(entityObj);
 		return catKey.getId();
 	}
