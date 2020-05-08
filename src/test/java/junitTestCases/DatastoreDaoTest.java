@@ -68,5 +68,12 @@ public class DatastoreDaoTest {
 		String result = dao.deleteCategory(34534346);
 		Assert.assertEquals("Category was deleted successfully !", result);
 	 }
+	
+	@Test 
+	public void testDatastoreToReadCategory()throws ServletException,IOException {
+	
+		Category resultObj = dao.readCategory(14534);
+		System.out.println(resultObj);
+	 }
 	 
 }

@@ -8,5 +8,8 @@ public interface NotesappDao {
 	
 	Category updateCategory(Category catObj);
 	
-	String deleteCategory(long id); 
+	String deleteCategory(long id);
+
+	Category readCategory(long categoryId);
+	
 }

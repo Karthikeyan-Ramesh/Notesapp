@@ -50,14 +50,8 @@ public class DatastoreDao implements NotesappDao{
 		
 	}
 
-	private Category entityToCategory(Entity enObj) {
-		
-		 return new Category.Builder()                       
-			        .categoryName((String) enObj.getProperty(Category.CATEGORY_NAME))
-			        .id(enObj.getKey().getId())
-			        .build();
-	}
 	
+	@Override
 	public String deleteCategory(long id) {
 		
 		Key key = KeyFactory.createKey(CATEGORY_KIND, id);  
@@ -69,5 +63,22 @@ public class DatastoreDao implements NotesappDao{
 		}
 	}
 	  
- 
+	public Category readCategory(long categoryId) {
+		  Entity entity;
+			try {
+				entity = datastore.get(KeyFactory.createKey(CATEGORY_KIND,categoryId ));
+				return entityToCategory(entity); 
+			} catch (EntityNotFoundException e) {
+				return null;
+			}
+	  }
+	
+	private Category entityToCategory(Entity enObj) {
+		
+		 return new Category.Builder()                       
+			        .categoryName((String) enObj.getProperty(Category.CATEGORY_NAME))
+			        .id(enObj.getKey().getId())
+			        .build();
+	}
+	
 }

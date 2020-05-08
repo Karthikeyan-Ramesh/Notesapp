@@ -26,6 +26,16 @@ public class CategoryAction extends HttpServlet {
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String[] urlarr = request.getRequestURI().replace(":/", "").split("/");
+		 long id = Long.parseLong(urlarr[3]);
+		 if(id!=0) {
+			 NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
+			 Category result = dao.readCategory(id);
+			 response.getWriter().print(result);
+		 }else {
+			 response.getWriter().print("Category key should not be zero");
+		 }
 	}
 
 	@Override
@@ -34,7 +44,7 @@ public class CategoryAction extends HttpServlet {
 		Date date = new Date();
 		Category catObj = new Category.Builder()
 				.categoryName(request.getParameter("categoryName"))
-				.createdBy(request.getParameter("createdBy"))
+				.createdBy("Admin")
 				.createdDateTime(date)
 				.build();
 		
@@ -67,7 +77,7 @@ public class CategoryAction extends HttpServlet {
 			Category catObj = new Category.Builder()
 					.categoryName(request.getParameter("categoryName"))
 					.id(id)
-					.modifiedBy(request.getParameter("modifiedBy"))
+					.modifiedBy("Admin")
 					.modifiedDateTime(date)
 					.build();
 					
