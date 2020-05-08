@@ -37,31 +37,71 @@ public class CategoryAction extends HttpServlet {
 				.createdBy(request.getParameter("createdBy"))
 				.createdDateTime(date)
 				.build();
-				
-		if(Pattern.matches("[a-zA-Z]", catObj.getCategoryName())) {    //to check whether the category only contain alphabets
+		
+		
+			boolean Check = categoryNameCheck(catObj.getCategoryName());
+			System.out.print(Check);
+			
 			
 		NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
 	    
 	    long id = dao.createCategory(catObj);
 	    
-	    System.out.println(id);
 	    if(id !=0) {
-	    	response.getWriter().print("Category created successfully !");
+	    	response.getWriter().print("Category was created successfully !");
 	    }
 	    else {
 	    	response.getWriter().print("Failed to create Category");
 	    }
 	    
-		}else {
-			response.getWriter().print("Category should only contains Alphabets ");
-		}
 	}
 	
+
 	@Override
 	public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String[] urlarr = request.getRequestURI().replace(":/", "").split("/");
+		 long id = Long.parseLong(urlarr[3]);
+		 if(id!=0) {
+		 Date date = new Date();
+			Category catObj = new Category.Builder()
+					.categoryName(request.getParameter("categoryName"))
+					.id(id)
+					.modifiedBy(request.getParameter("modifiedBy"))
+					.modifiedDateTime(date)
+					.build();
+					
+			NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
+		    
+			Category resObj = dao.updateCategory(catObj);
+		    
+		    if(resObj !=null) {
+		    	response.getWriter().print("Category was updated successfully !");
+		    }
+		    else {
+		    	response.getWriter().print("Failed to update Category");
+		    }
+		 }else {
+			 	response.getWriter().print("Category key should not be zero");
+		 }
 	}
 
 	@Override
 	public void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String[] urlarr = request.getRequestURI().replace(":/", "").split("/");
+		 long id = Long.parseLong(urlarr[3]);
+		 if(id!=0) {
+			 NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
+			 String result = dao.deleteCategory(id);
+			 response.getWriter().print(result);
+		 }else {
+			 response.getWriter().print("Category key should not be zero");
+		 }
+	}
+	
+	private boolean categoryNameCheck(String categoryName) {
+
+		return Pattern.matches("[a-zA-Z]", categoryName);  
 	}
 }

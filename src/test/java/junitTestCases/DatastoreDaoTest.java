@@ -13,6 +13,7 @@ import com.notesapp.pojos.Category;
 import javax.servlet.ServletException;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 public class DatastoreDaoTest {
@@ -46,6 +47,26 @@ public class DatastoreDaoTest {
 				.build();
 		long id = dao.createCategory(catObj);
 		assertNotEquals(0, id);
+	 }
+	
+	@Test 
+	public void testDatastoreToUpdateCategory()throws ServletException,IOException {
+	
+		Category catObj = new Category.Builder()
+				.categoryName("works")
+				.id(23234356)
+				.modifiedBy("Admin")
+				.build();
+		Category resObj = dao.updateCategory(catObj);
+		assertNotEquals(null, resObj);
+		Assert.assertEquals("works", resObj.getCategoryName());
+	 }
+	
+	@Test 
+	public void testDatastoreToDeleteCategory()throws ServletException,IOException {
+	
+		String result = dao.deleteCategory(34534346);
+		Assert.assertEquals("Category was deleted successfully !", result);
 	 }
 	 
 }
