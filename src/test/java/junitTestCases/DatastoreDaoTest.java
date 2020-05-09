@@ -9,6 +9,7 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.notesapp.daos.DatastoreDao;
 import com.notesapp.pojos.Category;
+import com.notesapp.pojos.Notes;
 
 import javax.servlet.ServletException;
 
@@ -73,7 +74,53 @@ public class DatastoreDaoTest {
 	public void testDatastoreToReadCategory()throws ServletException,IOException {
 	
 		Category resultObj = dao.readCategory(14534);
-		System.out.println(resultObj);
 	 }
 	 
+	@Test 
+	public void testDatastoreToCreateNotes()throws ServletException,IOException {
+	
+		Category catObj = new Category.Builder()
+				.id(1)
+				.build();
+		Notes noteObj = new Notes.Builder()
+				.noteName("Morning")
+				.noteDescription("excersice")
+				.categoryId(catObj)
+				.createdBy("Admin")
+				.build();
+		long id = dao.createNote(noteObj);
+		assertNotEquals(0, id);
+	 }
+	
+	@Test 
+	public void testDatastoreToUpdateNotes()throws ServletException,IOException {
+	
+		
+		Category catObj = new Category.Builder()
+				.id(1)
+				.build();
+		Notes noteObj = new Notes.Builder()
+				.noteName("Evening")
+				.noteDescription("excersice")
+				.categoryId(catObj)
+				.id(436346)
+				.createdBy("Admin")
+				.build();
+		Notes resultObj = dao.updateNote(noteObj);
+		assertNotEquals(null, resultObj);
+		Assert.assertEquals("Evening", resultObj.getNoteName());
+	 }
+	
+	@Test 
+	public void testDatastoreToDeleteNotes()throws ServletException,IOException {
+	
+		String result = dao.deleteNote(34534346);
+		Assert.assertEquals("Note was deleted successfully !", result);
+	 }
+	
+	@Test 
+	public void testDatastoreToReadNote()throws ServletException,IOException {
+	
+		Notes resultObj = dao.readNote(14534);
+	 }
 }

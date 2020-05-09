@@ -49,10 +49,6 @@ public class CategoryAction extends HttpServlet {
 				.build();
 		
 		
-			boolean Check = categoryNameCheck(catObj.getCategoryName());
-			System.out.print(Check);
-			
-			
 		NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
 	    
 	    long id = dao.createCategory(catObj);

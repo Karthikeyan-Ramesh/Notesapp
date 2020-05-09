@@ -4,17 +4,16 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
   <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
   
   <servlet>
-	<servlet-name>category</servlet-name>
+	<servlet-name>categoryServlet</servlet-name>
 	<servlet-class>com.notesapp.servlets.CategoryAction</servlet-class>
   </servlet>
   <servlet-mapping>
-	<servlet-name>category</servlet-name>
+	<servlet-name>categoryServlet</servlet-name>
 	<url-pattern>/category/*</url-pattern>
   </servlet-mapping>
-
+  
 </web-app>
