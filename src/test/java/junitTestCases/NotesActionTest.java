@@ -2,10 +2,15 @@ package junitTestCases;
 
 import static org.mockito.Mockito.when;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -68,28 +73,42 @@ public class NotesActionTest {
 	 @Test 
 	 public void testToCreateNote() throws Exception {
 		 when(request.getRequestURI()).thenReturn(URL);
-		 when(request.getParameter("noteName")).thenReturn("Sports");
-		 when(request.getParameter("noteDescription")).thenReturn("Sports was Interesting");
-		 when(request.getParameter("categoryId")).thenReturn("3343");
+		 JSONObject jb = new JSONObject();
+			try {
+				jb.put("noteName", "Sports");
+				jb.put("noteDescription", "Sports was Interesting");
+				jb.put("categoryId", 3343);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		 when(request.getReader()).thenReturn(new BufferedReader(new StringReader(jb.toString())));
 		 noteObj.doPost(request, response);
-		 Assert.assertEquals("Note was created successfully !", response.getWriterContent().toString()); 
+		 Assert.assertEquals("application/json", response.getContentType());
 	 }
 	  
 	 @Test 
 	 public void testToUpdateNote() throws Exception {
 		 url();
-		 when(request.getParameter("noteName")).thenReturn("Sports");
-		 when(request.getParameter("noteDescription")).thenReturn("Sports was Interesting");
-		 when(request.getParameter("categoryId")).thenReturn("3343");
-		 
+		 JSONObject jb = new JSONObject();
+			try {
+				jb.put("noteName", "Sports");
+				jb.put("noteDescription", "Sports was very Interesting");
+				jb.put("categoryId", 3343);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		 when(request.getReader()).thenReturn(new BufferedReader(new StringReader(jb.toString())));
 		 noteObj.doPut(request, response);
-		 Assert.assertEquals("Note was updated successfully !", response.getWriterContent().toString()); 
+		 Assert.assertEquals("application/json", response.getContentType());
      }
 	 
 	 @Test
 	 public void testToReadNote() throws Exception {
 			url();
 			noteObj.doGet(request, response);
+			//Assert.assertEquals("application/json", response.getContentType());
 		}
 	 
 	 
@@ -97,7 +116,7 @@ public class NotesActionTest {
 	 public void testToDeleteNote() throws Exception {
 		url();
 		noteObj.doDelete(request, response);
-		Assert.assertEquals("Note was deleted successfully !", response.getWriterContent().toString());
+		Assert.assertEquals("application/json", response.getContentType());
 	}
 
 }

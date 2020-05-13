@@ -4,6 +4,8 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,6 +14,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.when;
+
+import java.io.BufferedReader;
+import java.io.StringReader;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -56,7 +61,7 @@ public class CategoryActionTest {
 		
 	}
 	public void url() throws Exception {
-		when(request.getRequestURI()).thenReturn(URL+"34534534");
+		when(request.getRequestURI()).thenReturn(URL+"1");
 	}
 	
 	@After
@@ -67,23 +72,39 @@ public class CategoryActionTest {
 	 @Test 
 	 public void testToCreateCategory() throws Exception {
 		 when(request.getRequestURI()).thenReturn(URL);
-		 when(request.getParameter("categoryName")).thenReturn("Sports");
+		 
+		 JSONObject jb = new JSONObject();
+			try {
+				jb.put("categoryName", "Sports");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		 when(request.getReader()).thenReturn(new BufferedReader(new StringReader(jb.toString())));
 		 catActObj.doPost(request, response);
-		 Assert.assertEquals("Category was created successfully !", response.getWriterContent().toString()); 
+		 Assert.assertEquals("application/json", response.getContentType());
 	 }
 	  
 	 @Test 
 	 public void testToUpdateCategory() throws Exception {
 		 url();
-		 when(request.getParameter("categoryName")).thenReturn("DailyWalk");
+		 JSONObject jb = new JSONObject();
+			try {
+				jb.put("categoryName", "Dailywalk");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		 when(request.getReader()).thenReturn(new BufferedReader(new StringReader(jb.toString())));
 		 catActObj.doPut(request, response);
-		 Assert.assertEquals("Category was updated successfully !", response.getWriterContent().toString()); 
+		 Assert.assertEquals("application/json", response.getContentType());
      }
 	 
 	 @Test
 	 public void testToReadCategory() throws Exception {
 			url();
-			catActObj.doDelete(request, response);
+			catActObj.doGet(request, response);
+			//Assert.assertEquals("application/json", response.getContentType());
 		}
 	 
 	 
@@ -91,7 +112,7 @@ public class CategoryActionTest {
 	 public void testToDeleteCategory() throws Exception {
 		url();
 		catActObj.doDelete(request, response);
-		Assert.assertEquals("Category was deleted successfully !", response.getWriterContent().toString());
+		Assert.assertEquals("application/json", response.getContentType());
 	}
 
 }

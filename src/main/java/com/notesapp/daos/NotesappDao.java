@@ -5,20 +5,20 @@ import com.notesapp.pojos.Notes;
 
 public interface NotesappDao {
 
-	long createCategory(Category catObj);
+	Category createCategory(Category catObj);
 	
 	Category updateCategory(Category catObj);
 	
-	String deleteCategory(long categoryId);
+	boolean deleteCategory(long categoryId);
 
-	Category readCategory(long categoryId);
+	Category readCategoryById(long categoryId);
 	
 	
-	long createNote(Notes noteObj);
+	Notes createNote(Notes noteObj);
 	
 	Notes updateNote(Notes noteObj);
 	
-	String deleteNote(long noteId);
+	boolean deleteNote(long noteId);
 	
 	Notes readNote(long noteId);
 }

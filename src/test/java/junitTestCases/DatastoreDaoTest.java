@@ -46,8 +46,9 @@ public class DatastoreDaoTest {
 				.categoryName("Sports")
 				.createdBy("Admin")
 				.build();
-		long id = dao.createCategory(catObj);
-		assertNotEquals(0, id);
+		Category resObj = dao.createCategory(catObj);
+		assertNotEquals(null, resObj);
+		Assert.assertEquals("Sports", resObj.getCategoryName());
 	 }
 	
 	@Test 
@@ -66,14 +67,15 @@ public class DatastoreDaoTest {
 	@Test 
 	public void testDatastoreToDeleteCategory()throws ServletException,IOException {
 	
-		String result = dao.deleteCategory(34534346);
-		Assert.assertEquals("Category was deleted successfully !", result);
+		boolean isDeleted = dao.deleteCategory(1);
+		Assert.assertEquals(true, isDeleted);
 	 }
 	
 	@Test 
 	public void testDatastoreToReadCategory()throws ServletException,IOException {
 	
-		Category resultObj = dao.readCategory(14534);
+		Category resultObj = dao.readCategoryById(1);
+		Assert.assertEquals(null, resultObj);
 	 }
 	 
 	@Test 
@@ -88,8 +90,9 @@ public class DatastoreDaoTest {
 				.categoryId(catObj)
 				.createdBy("Admin")
 				.build();
-		long id = dao.createNote(noteObj);
-		assertNotEquals(0, id);
+		Notes resObj = dao.createNote(noteObj);
+		assertNotEquals(null, resObj);
+		Assert.assertEquals("excersice", resObj.getNoteDescription());
 	 }
 	
 	@Test 
@@ -114,13 +117,15 @@ public class DatastoreDaoTest {
 	@Test 
 	public void testDatastoreToDeleteNotes()throws ServletException,IOException {
 	
-		String result = dao.deleteNote(34534346);
-		Assert.assertEquals("Note was deleted successfully !", result);
+		boolean isDelete = dao.deleteNote(1);
+		Assert.assertEquals(true, isDelete);
 	 }
 	
 	@Test 
 	public void testDatastoreToReadNote()throws ServletException,IOException {
 	
-		Notes resultObj = dao.readNote(14534);
+		Notes resultObj = dao.readNote(1);
+		Assert.assertEquals(null, resultObj);
+		
 	 }
 }

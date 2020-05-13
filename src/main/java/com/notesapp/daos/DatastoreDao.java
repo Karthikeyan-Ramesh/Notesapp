@@ -25,14 +25,14 @@ public class DatastoreDao implements NotesappDao{
 	  }
 
 	@Override
-	public long createCategory(Category catObj) {
+	public Category createCategory(Category catObj) {
 		
 		Entity entityObj = new Entity(CATEGORY_KIND);
 		entityObj.setProperty(Category.CATEGORY_NAME, catObj.getCategoryName());
 		entityObj.setProperty(Category.CREATED_DATETIME,catObj.getCreatedDateTime());
 		entityObj.setProperty(Category.CREATED_BY, catObj.getCreatedBy());
 		Key catKey = datastore.put(entityObj);
-		return catKey.getId();
+		return readCategoryById(catKey.getId());
 	}
 	  
 	@Override
@@ -43,32 +43,24 @@ public class DatastoreDao implements NotesappDao{
 		entityObj.setProperty(Category.MODIFIED_DATETIME,catObj.getModifiedDateTime());
 		entityObj.setProperty(Category.MODIFIED_BY, catObj.getModifiedBy());
 		datastore.put(entityObj);
-		
-		Entity resultObj;
-		try {
-			resultObj = datastore.get(KeyFactory.createKey(CATEGORY_KIND, catObj.getId()));
-			return entityToCategory(resultObj);
-		} catch (EntityNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return readCategoryById(catObj.getId());
 		
 	}
 
 	
 	@Override
-	public String deleteCategory(long categoryId) {
+	public boolean deleteCategory(long categoryId) {
 		
 		Key key = KeyFactory.createKey(CATEGORY_KIND, categoryId);  
 		if(key!=null) {
 		    datastore.delete(key);   
-		    return "Category was deleted successfully !";
+		    return true;
 		}else {
-		    return "Failed to delete Category";
+		    return false;
 		}
 	}
 	  
-	public Category readCategory(long categoryId) {
+	public Category readCategoryById(long categoryId) {
 		  Entity entity;
 			try {
 				entity = datastore.get(KeyFactory.createKey(CATEGORY_KIND,categoryId ));
@@ -91,7 +83,7 @@ public class DatastoreDao implements NotesappDao{
 	}
 
 	@Override
-	public long createNote(Notes noteObj) {
+	public Notes createNote(Notes noteObj) {
 
 		Entity entityObj = new Entity(NOTES_KIND);
 		entityObj.setProperty(Notes.Note_NAME,noteObj.getNoteName());
@@ -100,7 +92,7 @@ public class DatastoreDao implements NotesappDao{
 		entityObj.setProperty(Notes.CREATED_BY,noteObj.getCreatedBy());
 		entityObj.setProperty(Notes.CREATED_DATETIME,noteObj.getCreatedDateTime());
 		Key noteKey = datastore.put(entityObj);
-		return noteKey.getId();
+		return readNote(noteKey.getId());
 	}
 	
 	@Override
@@ -113,26 +105,18 @@ public class DatastoreDao implements NotesappDao{
 		entityObj.setProperty(Notes.MODIFIED_BY, noteObj.getModifiedBy());
 		entityObj.setProperty(Notes.MODIFIED_DATETIME,noteObj.getModifiedDateTime());
 		datastore.put(entityObj);
-		
-		Entity resultObj;
-		try {
-			resultObj = datastore.get(KeyFactory.createKey(NOTES_KIND, noteObj.getId()));
-			return entityToNotes(resultObj);
-		} catch (EntityNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return readNote(noteObj.getId());
 	}
 	
 	@Override
-	public String deleteNote(long noteId) {
+	public boolean deleteNote(long noteId) {
 		
 		Key key = KeyFactory.createKey(NOTES_KIND, noteId);  
 		if(key!=null) {
 		    datastore.delete(key);   
-		    return "Note was deleted successfully !";
+		    return true;
 		}else {
-		    return "Failed to delete Note";
+		    return false;
 		}
 	}
 	
