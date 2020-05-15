@@ -1,50 +1,120 @@
 .button {
-	  background-color:#2d2e30;
-	  border: white;
-	  border-style: solid;
-	  color: white;
-	  padding: 10px 8px;
-	  text-align: center;
-	  text-decoration: none;
-	  display: inline-block;
-	  font-size: 22px;
-	  margin: 4px 2px;
-	  cursor: pointer;
-	  border-radius:6px;
+	background-color: #2d2e30;
+	border: white;
+	border-style: solid;
+	color: white;
+	padding: 10px 8px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 22px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 6px;
 }
-.body-contents{
-	background-color:#2d2e30;
+
+.red_button {
+	background-color: #cc261b;
+	border: white;
+	border-style: solid;
+	color: white;
+	padding: 10px 8px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 6px;
+}
+
+.yellow_button {
+	background-color: #bf8e08;
+	border-style: solid;
+	color: white;
+	padding: 10px 8px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 6px;
+}
+
+.green {
+	background-color: #069631;
+	float : right;
+}
+
+.body-contents {
+	background-color: #2d2e30;
+	text-align: center;
+}
+
+input[type=text], select {
+	width: 25%;
+	padding: 20px 24px;
+	margin: 12px 0;
+	margin-left: -25px;
+	display: inline-block;
+	background-color: #2d2e30;
+	font-size: 28px;
+	color: white;
+	border: 2px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+#form {
+	margin-top: 150px;
+}
+
+#home h1 {
+	margin-top: 100px;
+	font-size: 42px;
+	color: white;
+}
+
+#home label {
+	margin-top: 100px;
+}
+
+#add_category button {
+	margin-top: 25px;
+	margin-left: -25px;
+}
+
+.red {
+	color: red;
+	font-size: 18px;
+}
+
+#category_list{
 	text-align:center;
 }
-input[type=text], select {
-  width: 25%;
-  padding: 20px 24px;
-  margin: 12px 0;
-  margin-left:-25px;
-  display: inline-block;
-  background-color:#2d2e30;
-  font-size: 28px;
-  color:white;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-#Category{
-	margin-top:150px;
-}
-#home h1{
-	margin-top:100px;
-	font-size: 42px;
+
+#category_list h1{
 	color:white;
 }
-#home label{
-	margin-top:100px;
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  background-color:white;
+  width: 100%;
 }
-#addCategory button{
-	margin-top:25px;
-	margin-left:-25px;
+
+td, th {
+  border: 0px solid #dddddd;
+  text-align: left;
+  padding: 8px;
 }
-.red{
-	color:red;
-	font-size: 18px;
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.hidden{
+	display:none;
 }

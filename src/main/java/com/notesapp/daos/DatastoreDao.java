@@ -1,15 +1,24 @@
 package com.notesapp.daos;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.QueryResultIterator;
 import com.notesapp.pojos.Category;
 import com.notesapp.pojos.Notes;
+import com.notesapp.pojos.Result;
 
 
 
@@ -40,6 +49,8 @@ public class DatastoreDao implements NotesappDao{
 		
 		Entity entityObj = new Entity(CATEGORY_KIND,catObj.getId());
 		entityObj.setProperty(Category.CATEGORY_NAME, catObj.getCategoryName());
+		entityObj.setProperty(Category.CREATED_DATETIME,catObj.getCreatedDateTime());
+		entityObj.setProperty(Category.CREATED_BY, catObj.getCreatedBy());
 		entityObj.setProperty(Category.MODIFIED_DATETIME,catObj.getModifiedDateTime());
 		entityObj.setProperty(Category.MODIFIED_BY, catObj.getModifiedBy());
 		datastore.put(entityObj);
@@ -59,7 +70,8 @@ public class DatastoreDao implements NotesappDao{
 		    return false;
 		}
 	}
-	  
+	
+	@Override
 	public Category readCategoryById(long categoryId) {
 		  Entity entity;
 			try {
@@ -81,6 +93,25 @@ public class DatastoreDao implements NotesappDao{
 			        .modifiedBy((String) enObj.getProperty(Category.MODIFIED_BY))
 			        .build();
 	}
+	
+	 public Result<Category>categoryList() {
+		      FetchOptions fetchOptions = FetchOptions.Builder.withLimit(30);
+		  	  Query query = new Query(CATEGORY_KIND).addSort(Category.CATEGORY_NAME, SortDirection.ASCENDING);
+			  PreparedQuery preparedQuery = datastore.prepare(query);
+			  QueryResultIterator<Entity>results = preparedQuery.asQueryResultIterator(fetchOptions);
+			  List<Category> resultUsers = categoryIteration(results);
+			  return new Result<>(resultUsers);
+			  
+	  }
+	  
+	  public List<Category> categoryIteration(Iterator<Entity> results) {
+		  
+		    List<Category> resultUsers = new ArrayList<>();
+		    while(results.hasNext())  
+		      resultUsers.add(entityToCategory(results.next()));      
+		    return resultUsers;
+      }
+	  
 
 	@Override
 	public Notes createNote(Notes noteObj) {

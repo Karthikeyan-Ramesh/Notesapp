@@ -2,6 +2,7 @@ package com.notesapp.daos;
 
 import com.notesapp.pojos.Category;
 import com.notesapp.pojos.Notes;
+import com.notesapp.pojos.Result;
 
 public interface NotesappDao {
 
@@ -12,6 +13,8 @@ public interface NotesappDao {
 	boolean deleteCategory(long categoryId);
 
 	Category readCategoryById(long categoryId);
+	
+	Result<Category> categoryList();
 	
 	
 	Notes createNote(Notes noteObj);

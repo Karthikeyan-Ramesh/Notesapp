@@ -3,6 +3,7 @@ package com.notesapp.servlets;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import com.notesapp.daos.DatastoreDao;
 import com.notesapp.daos.NotesappDao;
 import com.notesapp.pojos.Category;
+import com.notesapp.pojos.Result;
 
 
 
@@ -32,7 +34,7 @@ public class CategoryAction extends HttpServlet {
 		
 		try {
 		String[] urlarr = request.getRequestURI().replace(":/", "").split("/");
-		 long id = Long.parseLong(urlarr[3]);
+		 long id = Long.parseLong(urlarr[2]);
 		 if(id!=0) {
 			 NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
 			 Category resultObj = dao.readCategoryById(id);
@@ -68,9 +70,12 @@ public class CategoryAction extends HttpServlet {
 				
 			NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao"); 
 			Category resultObj = dao.createCategory(catObj);
-			JSONObject result = categoryResponse(resultObj);
-			response.setContentType("application/json");
-			response.getWriter().println(result);	
+			if(resultObj.getCategoryName().equals(jsonObject.getString("categoryName"))) {
+				Result<Category>results = dao.categoryList();
+				JSONObject result = categoryListResponse(results.result);
+				response.setContentType("application/json");
+				response.getWriter().println(result);	
+			}
 		
 		}catch(Exception e) {}
 	    
@@ -89,22 +94,30 @@ public class CategoryAction extends HttpServlet {
 		    	 jb.append(line);
 		  
 			 String[] urlarr = request.getRequestURI().replace(":/", "").split("/");
-			 long id = Long.parseLong(urlarr[3]);
+			 long id = Long.parseLong(urlarr[2]);
 			 Date date = new Date();
 		 
 			 JSONObject jsonObject = new JSONObject(jb.toString());
-			 Category catObj = new Category.Builder()
-					.categoryName(jsonObject.getString("categoryName"))
-					.id(id)
-					.modifiedBy("Admin")
-					.modifiedDateTime(date)
-					.build();
 					
 			 NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
-			 Category resultObj = dao.updateCategory(catObj);
-			 JSONObject result = categoryResponse(resultObj);
-			 response.setContentType("application/json");
-			 response.getWriter().println(result);
+			 Category byId = dao.readCategoryById(id);
+			 
+			 byId = new Category.Builder()
+					 .categoryName(jsonObject.getString("categoryName"))
+					 .id(id)
+					 .createdBy(byId.getCreatedBy())
+					 .createdDateTime(byId.getCreatedDateTime())
+					 .modifiedBy("Admin")
+					 .modifiedDateTime(date)
+					 .build();
+			 
+			 Category resultObj = dao.updateCategory(byId);
+			 if(resultObj.getCategoryName().equals(jsonObject.getString("categoryName"))) {
+					Result<Category>results = dao.categoryList();
+					JSONObject result = categoryListResponse(results.result);
+					response.setContentType("application/json");
+					response.getWriter().println(result);	
+			}
 		   
 		 }catch (Exception e) { }
 	}
@@ -114,14 +127,16 @@ public class CategoryAction extends HttpServlet {
 		
 		try {
 			String[] urlarr = request.getRequestURI().replace(":/", "").split("/");
-			long id = Long.parseLong(urlarr[3]);
+			long id = Long.parseLong(urlarr[2]);
 			if(id!=0) {
 				NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
 				boolean isDeleted = dao.deleteCategory(id);
-		    	JSONObject result = new JSONObject();
-		    	result.put("Success",isDeleted );
+				if(isDeleted) {
+				Result<Category>results = dao.categoryList();
+				JSONObject result = categoryListResponse(results.result);
 				response.setContentType("application/json");
-				response.getWriter().println(result);
+				response.getWriter().println(result);	
+				}
 			 }else {
 				 response.getWriter().print("Category key should not be zero");
 			 }
@@ -136,7 +151,29 @@ public class CategoryAction extends HttpServlet {
 			result.put("id", resultObj.getId());
 			result.put("categoryName", resultObj.getCategoryName());
 	    	result.put("createdBy", resultObj.getCreatedBy());
-	    	result.put("CreatedDatetime", resultObj.getCreatedDateTime());
+	    	result.put("createdDatetime", resultObj.getCreatedDateTime());
+	    	result.put("modifiedBy", resultObj.getModifiedBy());
+	    	result.put("modifiedDatetime", resultObj.getModifiedDateTime());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	return result; 
+	}
+	
+	private JSONObject categoryListResponse(List<Category> list) {
+
+		JSONObject result = new JSONObject();
+    	try {
+    		for(int i=0;i<list.size();i++) {
+    	    JSONObject res = new JSONObject();
+    	    res.put("id", list.get(i).getId());
+    	    res.put("categoryName", list.get(i).getCategoryName());
+    	    res.put("createdBy", list.get(i).getCreatedBy());
+    	    res.put("createdDatetime", list.get(i).getCreatedDateTime());
+    	    res.put("modifiedBy", list.get(i).getModifiedBy());
+    	    res.put("modifiedDatetime", list.get(i).getModifiedDateTime());
+    	    result.put(i+"", res);
+    		}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
