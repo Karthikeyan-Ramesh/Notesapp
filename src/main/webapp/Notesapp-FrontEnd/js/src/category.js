@@ -1,9 +1,5 @@
 function myfunc() {
-	window.location.href = "/view.jsp";
-}
-
-function create() {
-	document.getElementById("categorySubmit").onclick = updateCategory();
+	window.location.href = "/category.jsp";
 }
 
 function isName(event) {
@@ -21,7 +17,7 @@ function addcategory() {
 	var category = document.getElementById("category").value;
 	if (category != "" && category != null) {
 		document.getElementById("form").style.display = "none";
-		ajaxcall("POST", "/category", "application/json", "{categoryName:"
+		categoryajaxcall("POST", "/category", "application/json", "{categoryName:"
 				+ category + "}");
 	} else {
 		document.getElementById("error").innerHTML = "Mandatory field required";
@@ -37,12 +33,12 @@ function edit(id,name){
 
 function remove(id){
 	alert("Are you sure, want to Delete Catgeory");
-	ajaxcall("DELETE", "/category/" + id, "application/json", "");
+	categoryajaxcall("DELETE", "/category/" + id, "application/json", "");
 }
 function updateCategory(id) {
 	var category = document.getElementById("updatecategory").value;
 	if (category != "" && category != null) {
-		ajaxcall("PUT", "/category/" + id, "application/json", "{categoryName:" + category + "}");
+		categoryajaxcall("PUT", "/category/" + id, "application/json", "{categoryName:" + category + "}");
 	} else {
 		document.getElementById("error").innerHTML = "Mandatory field required";
 	}
@@ -67,7 +63,7 @@ function categoryTable(list) {
 	document.getElementById("category_list").innerHTML = table;
 }
 
-function ajaxcall(method, url, content_type, input_data) {
+function categoryajaxcall(method, url, content_type, input_data) {
 
 	var xhr = new XMLHttpRequest();
 	xhr.open(method, url, true);

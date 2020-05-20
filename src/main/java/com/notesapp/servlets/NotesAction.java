@@ -3,6 +3,7 @@ package com.notesapp.servlets;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import com.notesapp.daos.NotesappDao;
 import com.notesapp.pojos.Category;
 import com.notesapp.pojos.Notes;
+import com.notesapp.pojos.Result;
 
 @SuppressWarnings("serial")
 public class NotesAction extends HttpServlet {
@@ -24,12 +26,19 @@ public class NotesAction extends HttpServlet {
 		
 		try {
 			 String[] urlarr = request.getRequestURI().replace(":/", "").split("/");
-			 long id = Long.parseLong(urlarr[3]);
+			 long id = Long.parseLong(urlarr[2]);
 			 NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
-			 Notes resObj = dao.readNote(id);
-			 JSONObject result = noteResponse(resObj);
-			 response.setContentType("application/json");
-			 response.getWriter().print(result);
+			 Result<Notes>results = dao.categoryBasedNotesList(id);
+			 if(results.result.size()!=0) {
+				 JSONObject result = notesListResponse(results.result);
+				 response.setContentType("application/json");
+				 response.getWriter().println(result);
+			 }else {
+				 response.setContentType("application/json");
+				 JSONObject res = new JSONObject();
+				 res.put("listSize", 0);
+				 response.getWriter().println(res);
+			 }
 		}catch(Exception e) {}
 	}
 
@@ -57,9 +66,19 @@ public class NotesAction extends HttpServlet {
 					.build();
 			NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
 			Notes resObj = dao.createNote(noteObj);
-			JSONObject result = noteResponse(resObj);
-			response.setContentType("application/json");
-			response.getWriter().println(result);
+			if(resObj.getNoteName().equals(jsonObject.getString("noteName"))) {
+				Result<Notes>results = dao.categoryBasedNotesList(resObj.getCategoryId().getId());
+				 if(results.result.size()!=0) {
+					 JSONObject result = notesListResponse(results.result);
+					 response.setContentType("application/json");
+					 response.getWriter().println(result);
+				 }else {
+					 response.setContentType("application/json");
+					 JSONObject res = new JSONObject();
+					 res.put("listSize", 0);
+					 response.getWriter().println(res);
+				 }
+			}
 		}catch(Exception e) {}
 	    
 	}
@@ -75,27 +94,42 @@ public class NotesAction extends HttpServlet {
 		     jb.append(line);
 		 
 			String[] urlarr = request.getRequestURI().replace(":/", "").split("/");
-			long id = Long.parseLong(urlarr[3]);
+			long id = Long.parseLong(urlarr[2]);
 			 
 			Date date = new Date();
 			JSONObject jsonObject = new JSONObject(jb.toString());
+			
+			NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
+			Notes noteObj = dao.readNote(id);
 			Category catObj = new Category.Builder()
 							.id(Long.parseLong(jsonObject.getString("categoryId")))
 							.build();
-			Notes noteObj = new Notes.Builder()
+			noteObj = new Notes.Builder()
 							.id(id)
 							.noteName(jsonObject.getString("noteName"))
 							.noteDescription(jsonObject.getString("noteDescription"))
 							.categoryId(catObj)
+							.createdBy(noteObj.getCreatedBy())
+							.createdDateTime(noteObj.getCreatedDateTime())
 							.modifiedBy("Admin")
 							.modifiedDateTime(date)
 							.build();
 						
-				NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
-				Notes resObj = dao.updateNote(noteObj);
-				JSONObject result = noteResponse(resObj);
-				response.setContentType("application/json");
-				response.getWriter().println(result);
+				
+			Notes resObj = dao.updateNote(noteObj);
+			if(resObj.getNoteName().equals(jsonObject.getString("noteName"))) {
+				Result<Notes>results = dao.categoryBasedNotesList(resObj.getCategoryId().getId());
+				 if(results.result.size()!=0) {
+					 JSONObject result = notesListResponse(results.result);
+					 response.setContentType("application/json");
+					 response.getWriter().println(result);
+				 }else {
+					 response.setContentType("application/json");
+					 JSONObject res = new JSONObject();
+					 res.put("listSize", 0);
+					 response.getWriter().println(res);
+				 }
+			}
 				
 		}catch(Exception e) {}
 			    
@@ -106,26 +140,37 @@ public class NotesAction extends HttpServlet {
 		
 		try {
 			String[] urlarr = request.getRequestURI().replace(":/", "").split("/");
-			long id = Long.parseLong(urlarr[3]);
+			long id = Long.parseLong(urlarr[2]);
 			NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
+			Notes noteObj = dao.readNote(id);
 		 	boolean isDeleted = dao.deleteNote(id);
-	    	JSONObject result = new JSONObject();
-	    	result.put("Success",isDeleted );
-			response.setContentType("application/json");
-			response.getWriter().println(result);
+		 	Result<Notes>results = dao.categoryBasedNotesList(noteObj.getCategoryId().getId());
+			 if(results.result.size()!=0) {
+				 JSONObject result = notesListResponse(results.result);
+				 response.setContentType("application/json");
+				 response.getWriter().println(result);
+			 }else {
+				 response.setContentType("application/json");
+				 JSONObject res = new JSONObject();
+				 res.put("listSize", 0);
+				 res.put("Success", isDeleted);
+				 response.getWriter().println(res);
+			 }
 		}catch(Exception e) {}
 	}
 	
-	private JSONObject noteResponse(Notes resultObj) {
+	
+	private JSONObject notesListResponse(List<Notes> list) {
 
 		JSONObject result = new JSONObject();
     	try {
-			result.put("id", resultObj.getId());
-			result.put("noteName", resultObj.getNoteName());
-			result.put("noteDescription", resultObj.getNoteDescription());
-			result.put("categoryId", resultObj.getCategoryId().getId());
-	    	result.put("createdBy", resultObj.getCreatedBy());
-	    	result.put("CreatedDatetime", resultObj.getCreatedDateTime());
+    		for(int i=0;i<list.size();i++) {
+    	    JSONObject res = new JSONObject();
+    	    res.put("id", list.get(i).getId());
+    	    res.put("noteName", list.get(i).getNoteName());
+    	    res.put("noteDescription", list.get(i).getNoteDescription());
+    	    result.put(i+"", res);
+    		}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

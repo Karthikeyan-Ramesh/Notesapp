@@ -28,7 +28,7 @@ describe("category", function() {
 			
 
 			it("response", function() {
-				ajaxcall("POST", "/category","application/json","{categoryName:sports}");
+				categoryajaxcall("POST", "/category","application/json","{categoryName:sports}");
 			});
 
 		});

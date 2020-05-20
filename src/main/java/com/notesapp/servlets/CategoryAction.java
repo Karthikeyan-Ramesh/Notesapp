@@ -33,19 +33,10 @@ public class CategoryAction extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		try {
-		String[] urlarr = request.getRequestURI().replace(":/", "").split("/");
-		 long id = Long.parseLong(urlarr[2]);
-		 if(id!=0) {
 			 NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
-			 Category resultObj = dao.readCategoryById(id);
-			 JSONObject result = categoryResponse(resultObj);
-			 response.setContentType("application/json");
-			 response.getWriter().println(result);
-			 
-		 }else {
-			 response.getWriter().print("Category key should not be zero");
-		 }
-		
+			 Result<Category>results = dao.categoryList();
+			 request.setAttribute("categoryList", results.result);
+			 request.getRequestDispatcher("/notes.jsp").forward(request, response);
 		}catch(Exception e) {}
 		
 	}
@@ -142,22 +133,6 @@ public class CategoryAction extends HttpServlet {
 			 }
 			
 		}catch(Exception e) {}
-	}
-	
-	private JSONObject categoryResponse(Category resultObj) {
-
-		JSONObject result = new JSONObject();
-    	try {
-			result.put("id", resultObj.getId());
-			result.put("categoryName", resultObj.getCategoryName());
-	    	result.put("createdBy", resultObj.getCreatedBy());
-	    	result.put("createdDatetime", resultObj.getCreatedDateTime());
-	    	result.put("modifiedBy", resultObj.getModifiedBy());
-	    	result.put("modifiedDatetime", resultObj.getModifiedDateTime());
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-    	return result; 
 	}
 	
 	private JSONObject categoryListResponse(List<Category> list) {

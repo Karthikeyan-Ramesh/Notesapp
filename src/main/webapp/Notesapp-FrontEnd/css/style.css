@@ -53,7 +53,7 @@
 }
 
 input[type=text], select {
-	width: 25%;
+	width: 28%;
 	padding: 20px 24px;
 	margin: 12px 0;
 	margin-left: -25px;
@@ -117,4 +117,91 @@ tr:nth-child(even) {
 
 .hidden{
 	display:none;
+}
+
+.dashboard{
+	background-color:#23272299;
+}
+
+.notesContent {
+    background-color: #0c6945;
+    border-radius: 2%;
+    border: 1px;
+    margin-top: -18px;
+    color: white;
+    font-size: 16px;
+}
+
+#multibutton{
+	margin-top:15px;
+	margin-left: 510px;
+}
+
+.spacing{
+	margin-right: 10px;
+}
+
+.shadow{
+	box-shadow: 0 8px 16px 0 #2d2e30;
+}
+
+.greennote{
+	background-color: #069631;
+}
+
+.lalign{
+	margin-left:-100px !important;
+}
+
+.rednote{
+	background-color: #cc261b;
+}
+
+.nname {
+    background-color: #0c6945 !important;
+    border-radius: 2% !important;
+    border: 0px !important;
+    width: 46.7% !important;
+    margin-left: 107px !important;
+}
+
+.noteadjust{
+	 margin-left: 0px !important;
+}
+
+.categorydropdown{
+	font-size: 12px !important;
+	width: 15% !important;
+}
+
+.add {
+    background-color: #069631;
+    border-style: solid;
+    color: white;
+    padding: 4px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 24px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 8px 16px 0 #2d2e30;
+    margin-left: 15px;
+}
+
+.min {
+    background-color: #cc261b;
+    border-style: solid;
+    color: white;
+    padding: 1px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 8px 16px 0 #2d2e30;
+    margin-left: 15px;
 }

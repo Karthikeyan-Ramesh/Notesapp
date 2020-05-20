@@ -24,4 +24,6 @@ public interface NotesappDao {
 	boolean deleteNote(long noteId);
 	
 	Notes readNote(long noteId);
+	
+	Result<Notes> categoryBasedNotesList(long categoryId);
 }

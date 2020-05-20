@@ -14,6 +14,9 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.notesapp.pojos.Category;
@@ -64,7 +67,14 @@ public class DatastoreDao implements NotesappDao{
 		
 		Key key = KeyFactory.createKey(CATEGORY_KIND, categoryId);  
 		if(key!=null) {
-		    datastore.delete(key);   
+		    datastore.delete(key); 
+		    Filter propertyFilter = new FilterPredicate(Notes.CATEGORY_ID, FilterOperator.EQUAL, categoryId);
+		  	Query query = new Query(NOTES_KIND).setFilter(propertyFilter);
+		    QueryResultIterator<Entity>results = datastore.prepare(query).asQueryResultIterator();
+			List<Notes> resultUsers = NotesIteration(results);
+			if(resultUsers.size() != 0)
+				for(int i=0;i<resultUsers.size();i++) 
+					deleteNote(resultUsers.get(0).getId());
 		    return true;
 		}else {
 		    return false;
@@ -112,6 +122,24 @@ public class DatastoreDao implements NotesappDao{
 		    return resultUsers;
       }
 	  
+	  public Result<Notes>categoryBasedNotesList(long categoryId) {
+		  Filter propertyFilter = new FilterPredicate(Notes.CATEGORY_ID, FilterOperator.EQUAL, categoryId);
+	  	  Query query = new Query(NOTES_KIND).setFilter(propertyFilter);
+		  PreparedQuery preparedQuery = datastore.prepare(query);
+		  QueryResultIterator<Entity>results = preparedQuery.asQueryResultIterator();
+		  List<Notes> resultUsers = NotesIteration(results);
+		  return new Result<>(resultUsers);
+		  
+     }
+	  
+	  
+	  public List<Notes> NotesIteration(Iterator<Entity> results) {
+		  
+		    List<Notes> resultUsers = new ArrayList<>();
+		    while(results.hasNext())  
+		      resultUsers.add(entityToNotes(results.next()));      
+		    return resultUsers;
+    }
 
 	@Override
 	public Notes createNote(Notes noteObj) {
