@@ -26,4 +26,6 @@ public interface NotesappDao {
 	Notes readNote(long noteId);
 	
 	Result<Notes> categoryBasedNotesList(long categoryId);
+	
+	Result<Notes> NotesList();
 }

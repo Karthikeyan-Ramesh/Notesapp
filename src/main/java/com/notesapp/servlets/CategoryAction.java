@@ -35,8 +35,16 @@ public class CategoryAction extends HttpServlet {
 		try {
 			 NotesappDao dao = (NotesappDao) this.getServletContext().getAttribute("dao");
 			 Result<Category>results = dao.categoryList();
-			 request.setAttribute("categoryList", results.result);
-			 request.getRequestDispatcher("/notes.jsp").forward(request, response);
+			 if(results.result.size()!=0) {
+				 JSONObject result = categoryListResponse(results.result);
+				 response.setContentType("application/json");
+				 response.getWriter().println(result);
+			 }else {
+				 response.setContentType("application/json");
+				 JSONObject res = new JSONObject();
+				 res.put("listSize", 0);
+				 response.getWriter().println(res);
+			 }
 		}catch(Exception e) {}
 		
 	}

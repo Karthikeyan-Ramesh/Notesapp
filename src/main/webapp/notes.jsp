@@ -9,13 +9,16 @@
 <title>Notes</title>
 <link rel="stylesheet" href="Notesapp-FrontEnd/css/style.css">
 </head>
-<body class="body-contents dashboard">
-<select id="categoryId" name="categoryId" class="categorydropdown shadow" onchange="notesbox()">
+<body class="body-contents" onload = "categoryListOnload()">
+<h1 id="logoHead">NotesApp</h1>
+<div id="categoryList">
+</div>
+<%-- <select id="categoryId" name="categoryId" class="categorydropdown shadow" onchange="notesbox()">
 	<option value="0">-- Select Category --</option>
 <c:forEach items="${categoryList}" var="category">  
-      <option value='<c:out value="${category.id}"/>'><c:out value="${category.categoryName}"/></option>
+     <option value='<c:out value="${category.id}"/>'><c:out value="${category.categoryName}"/></option>
 </c:forEach>
-</select><br/>
+</select><br/> --%>
 <div id="notesbox">
 </div>
 <script src="Notesapp-FrontEnd/js/src/notes.js"></script>

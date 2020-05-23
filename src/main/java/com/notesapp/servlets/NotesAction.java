@@ -2,6 +2,7 @@ package com.notesapp.servlets;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -163,12 +164,15 @@ public class NotesAction extends HttpServlet {
 	private JSONObject notesListResponse(List<Notes> list) {
 
 		JSONObject result = new JSONObject();
+		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
     	try {
     		for(int i=0;i<list.size();i++) {
     	    JSONObject res = new JSONObject();
     	    res.put("id", list.get(i).getId());
+    	    res.put("categoryId", list.get(i).getCategoryId().getId());
     	    res.put("noteName", list.get(i).getNoteName());
     	    res.put("noteDescription", list.get(i).getNoteDescription());
+    	    res.put("createdDatetime", df.format(list.get(i).getCreatedDateTime()));
     	    result.put(i+"", res);
     		}
 		} catch (JSONException e) {

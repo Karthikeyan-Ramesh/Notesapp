@@ -9,7 +9,6 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
@@ -104,11 +103,10 @@ public class DatastoreDao implements NotesappDao{
 			        .build();
 	}
 	
-	 public Result<Category>categoryList() {
-		      FetchOptions fetchOptions = FetchOptions.Builder.withLimit(30);
+	 public Result<Category> categoryList() {
 		  	  Query query = new Query(CATEGORY_KIND).addSort(Category.CATEGORY_NAME, SortDirection.ASCENDING);
 			  PreparedQuery preparedQuery = datastore.prepare(query);
-			  QueryResultIterator<Entity>results = preparedQuery.asQueryResultIterator(fetchOptions);
+			  QueryResultIterator<Entity>results = preparedQuery.asQueryResultIterator();
 			  List<Category> resultUsers = categoryIteration(results);
 			  return new Result<>(resultUsers);
 			  
@@ -122,14 +120,22 @@ public class DatastoreDao implements NotesappDao{
 		    return resultUsers;
       }
 	  
-	  public Result<Notes>categoryBasedNotesList(long categoryId) {
+	  public Result<Notes> categoryBasedNotesList(long categoryId) {
 		  Filter propertyFilter = new FilterPredicate(Notes.CATEGORY_ID, FilterOperator.EQUAL, categoryId);
-	  	  Query query = new Query(NOTES_KIND).setFilter(propertyFilter);
+	  	  Query query = new Query(NOTES_KIND).setFilter(propertyFilter).addSort(Notes.CREATED_DATETIME, SortDirection.ASCENDING);
 		  PreparedQuery preparedQuery = datastore.prepare(query);
 		  QueryResultIterator<Entity>results = preparedQuery.asQueryResultIterator();
 		  List<Notes> resultUsers = NotesIteration(results);
 		  return new Result<>(resultUsers);
 		  
+     }
+	  
+	  public Result<Notes> NotesList() {
+	  	  Query query = new Query(NOTES_KIND).addSort(Notes.CREATED_DATETIME, SortDirection.ASCENDING);
+		  PreparedQuery preparedQuery = datastore.prepare(query);
+		  QueryResultIterator<Entity>results = preparedQuery.asQueryResultIterator();
+		  List<Notes> resultUsers = NotesIteration(results);
+		  return new Result<>(resultUsers);	  
      }
 	  
 	  

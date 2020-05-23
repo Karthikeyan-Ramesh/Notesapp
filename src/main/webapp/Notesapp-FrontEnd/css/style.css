@@ -48,8 +48,9 @@
 }
 
 .body-contents {
-	background-color: #2d2e30;
+	background-color: #18191b;
 	text-align: center;
+	color:white;
 }
 
 input[type=text], select {
@@ -68,6 +69,19 @@ input[type=text], select {
 
 #form {
 	margin-top: 150px;
+}
+
+#noteform {
+	margin-top: 30px !important;
+}
+
+#when {
+    margin-left: 410px;
+    margin-bottom: -10px !important;
+}
+
+#logoHead{
+	margin-left: -25px !important;
 }
 
 #home h1 {

@@ -17,6 +17,7 @@ function addcategory() {
 	var category = document.getElementById("category").value;
 	if (category != "" && category != null) {
 		document.getElementById("form").style.display = "none";
+		document.getElementById("category_list").innerHTML =`<img src="https://cdn.dribbble.com/users/18886/screenshots/1027635/loading.gif" alt="loading" />`;
 		categoryajaxcall("POST", "/category", "application/json", "{categoryName:"
 				+ category + "}");
 	} else {
@@ -26,6 +27,7 @@ function addcategory() {
 }
 
 function edit(id,name){
+	document.getElementById("category_list").innerHTML =`<img src="https://cdn.dribbble.com/users/18886/screenshots/1027635/loading.gif" alt="loading" />`;
 	document.getElementById("category_list").innerHTML = `<input type="text" name="category" id="updatecategory" value="${name}" Placeholder="Category Name" onkeypress="return isName(event)" /><br />
 														  <p id="error" class="red"></p>
 														  <button id="categorySubmit" onclick="updateCategory(${id})" class="button">Save</button>`;
@@ -33,6 +35,7 @@ function edit(id,name){
 
 function remove(id){
 	alert("Are you sure, want to Delete Catgeory");
+	document.getElementById("category_list").innerHTML =`<img src="https://cdn.dribbble.com/users/18886/screenshots/1027635/loading.gif" alt="loading" />`;
 	categoryajaxcall("DELETE", "/category/" + id, "application/json", "");
 }
 function updateCategory(id) {
