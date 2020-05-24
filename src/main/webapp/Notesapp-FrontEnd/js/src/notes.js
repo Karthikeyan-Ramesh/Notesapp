@@ -76,16 +76,16 @@ function notesList(list){
 		var count =1;
 		for (i in noteObj) {
 			if(i==0){
-				notes+=`<input type="hidden" id="identity${count}" value="${noteObj[i].id}" /><h4 id="when">${noteObj[i].createdDatetime}</h4><input type="text" class="nname" value="${noteObj[i].noteName}" id="noteName1" Placeholder="Enter Your Note Name" /><span><a href='#' class="add" onclick="add()">+</a><a href='#' id="minus" class="min  hidden" onclick="remove()">-</a></span><br/><textarea class="notesContent" id="notesContent1" rows="9" cols="60" placeholder="Enter the Notes" >${noteObj[i].noteDescription}</textarea><div id='multibutton'><label onclick="savenote(1)" class="button greennote shadow spacing lalign">Save</label><label onclick="deletenote(${noteObj[i].id})" class="button rednote shadow spacing ">Delete</label></div>`;
+				notes+=`<div id="check${i}"><input type="hidden" id="identity${count}" value="${noteObj[i].id}" /><h4 id="when">${noteObj[i].createdDatetime}</h4><input type="text" class="nname" value="${noteObj[i].noteName}" id="noteName1" Placeholder="Enter Your Note Name" /><span><a href='#' class="add" onclick="add()">+</a><a href='#' id="minus" class="min  hidden" onclick="remove()">-</a></span><br/><textarea class="notesContent" id="notesContent1" rows="9" cols="60" placeholder="Enter the Notes" >${noteObj[i].noteDescription}</textarea><div id='multibutton'><label onclick="savenote(1)" class="button greennote shadow spacing lalign">Save</label><label onclick="deletenote(${noteObj[i].id})" class="button rednote shadow spacing ">Delete</label></div></div>`;
 			}else{
-				notes+=`<input type="hidden" id="identity${count}" value="${noteObj[i].id}" /><h4 id="when">${noteObj[i].createdDatetime}</h4><input type="text" class="nname noteadjust" value="${noteObj[i].noteName}" id="noteName${count}" Placeholder="Enter Your Note Name" /><br/><textarea class="notesContent" id="notesContent${count}" rows="9" cols="60" placeholder="Enter the Notes" >${noteObj[i].noteDescription}</textarea><div id='multibutton'><label onclick="savenote(${count})" class="button greennote shadow spacing lalign">Save</label><label onclick="deletenote(${noteObj[i].id})" class="button rednote shadow spacing ">Delete</label></div>`;
+				notes+=`<div id="check${i}"><input type="hidden" id="identity${count}" value="${noteObj[i].id}" /><h4 id="when">${noteObj[i].createdDatetime}</h4><input type="text" class="nname noteadjust" value="${noteObj[i].noteName}" id="noteName${count}" Placeholder="Enter Your Note Name" /><br/><textarea class="notesContent" id="notesContent${count}" rows="9" cols="60" placeholder="Enter the Notes" >${noteObj[i].noteDescription}</textarea><div id='multibutton'><label onclick="savenote(${count})" class="button greennote shadow spacing lalign">Save</label><label onclick="deletenote(${noteObj[i].id})" class="button rednote shadow spacing ">Delete</label></div></div>`;
 			}
 			count++;
 		}
 		count--;
 		document.getElementById("notesbox").innerHTML = `<input type="hidden" id="rowcount" value="${count}"/>`+notes;
 	}else{
-		document.getElementById("notesbox").innerHTML = `<input type="hidden" id="rowcount" value="1"/><input type="hidden" id="identity1" value="0" /><input type="text" class="nname" value="Note1" id="noteName1" Placeholder="Enter Your Note Name" /><span><a href='#' class="add" onclick="add()">+</a><a href='#' id="minus" class="min  hidden" onclick="remove()">-</a></span><br/><textarea class="notesContent" id="notesContent1" rows="9" cols="60" placeholder="Enter the Notes" ></textarea><div id='multibutton'><label onclick="savenote(1)" class="button greennote shadow spacing">Save</label></div>`;
+		document.getElementById("notesbox").innerHTML = `<input type="hidden" id="rowcount" value="1"/><div id="check${i}"><input type="hidden" id="identity1" value="0" /><input type="text" class="nname" value="Note1" id="noteName1" Placeholder="Enter Your Note Name" /><span><a href='#' class="add" onclick="add()">+</a><a href='#' id="minus" class="min  hidden" onclick="remove()">-</a></span><br/><textarea class="notesContent" id="notesContent1" rows="9" cols="60" placeholder="Enter the Notes" ></textarea><div id='multibutton'><label onclick="savenote(1)" class="button greennote shadow spacing">Save</label></div></div>`;
 	}
 	
 }
@@ -95,7 +95,7 @@ function add(){
 	 var i = parseInt(count)+1;
 	 if(i<=6){
 	 var newdiv = document.createElement('div');
-	 newdiv.innerHTML = `<input type="hidden" id="identity${i}" value="0" /><input type="text" class="nname noteadjust" value="Note${i}" id="noteName${i}" Placeholder="Enter Your Note Name" /><br/><textarea class="notesContent" id="notesContent${i}" rows="9" cols="60" placeholder="Enter the Notes" ></textarea><div id='multibutton'><label onclick="savenote(${i})" class="button greennote shadow spacing">Save</label></div>`;
+	 newdiv.innerHTML = `<div id="check${i}"><input type="hidden" id="identity${i}" value="0" /><input type="text" class="nname noteadjust" value="Note${i}" id="noteName${i}" Placeholder="Enter Your Note Name" /><br/><textarea class="notesContent" id="notesContent${i}" rows="9" cols="60" placeholder="Enter the Notes" ></textarea><div id='multibutton'><label onclick="savenote(${i})" class="button greennote shadow spacing">Save</label></div></div>`;
 	 document.getElementById("notesbox").appendChild(newdiv);
 	 document.getElementById("rowcount").value = i;
 	 }
@@ -103,7 +103,7 @@ function add(){
 
 function remove(){
 	 var i = document.getElementById("rowcount").value;
-	 document.getElementById("notesbox").removeChild();
+	 document.getElementById("check"+i).remove();
 	 document.getElementById("rowcount").value = parseInt(i)-1;
 }
 
